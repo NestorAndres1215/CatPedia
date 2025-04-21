@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🐱 Explorador de Razas Felinas</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header>
+    <div class="contenedor-principal">
+      <h1><span class="titulo-emoji">🐱</span> Explorador de Razas Felinas</h1>
+      <p class="descripcion">
+        Descubre y explora las fascinantes razas de gatos de todo el mundo. Conoce sus características, orígenes y
+        personalidades únicas.
+      </p>
+      <div class="buscador">
+        <input type="text" id="inputBusqueda" placeholder="Buscar por nombre, origen o características...">
+        <i class="fas fa-search icono-buscar"></i>
+      </div>
+    </div>
+  </header>
+
+  <main class="contenedor-principal">
+    <div class="filtros-container">
+      <h2 class="titulo-seccion">Explora por características</h2>
+      <div class="filtros" id="filtros">
+        <button class="btn-filtro activo" data-filtro="todos">Todos</button>
+        <button class="btn-filtro" data-filtro="pelaje-largo">Pelaje Largo</button>
+        <button class="btn-filtro" data-filtro="pelaje-corto">Pelaje Corto</button>
+        <button class="btn-filtro" data-filtro="jugueton">Juguetón</button>
+        <button class="btn-filtro" data-filtro="tranquilo">Tranquilo</button>
+        <button class="btn-filtro" data-filtro="social">Social</button>
+      </div>
+    </div>
+
+    <div id="contenedor" class="contenedor-razas"></div>
+
+    <div id="mensaje" class="mensaje-no-resultados" style="display:none;">
+      <i class="fas fa-cat"></i>
+      <p>No se encontraron razas que coincidan con tu búsqueda</p>
+      <button class="btn btn-primario" onclick="resetearBusqueda()">
+        <i class="fas fa-redo"></i> Reiniciar búsqueda
+      </button>
+    </div>
+
+    <div id="loader" class="loader">
+      <i class="fas fa-paw"></i>
+      <p>Cargando razas felinas...</p>
+    </div>
+
+    <div id="paginacion" class="paginacion"></div>
+    <div class="paginacion-info" id="paginacionInfo"></div>
+  </main>
+
+  <div class="volver-arriba" id="volverArriba">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMensaje">Mensaje de notificación</span>
+  </div>
+
+  <footer>
+    <div class="footer-contenido">
+      <div class="footer-enlaces">
+        <a href="#" class="footer-enlace">Sobre Nosotros</a>
+        <a href="#" class="footer-enlace">Política de Privacidad</a>
+        <a href="#" class="footer-enlace">Contacto</a>
+        <a href="#" class="footer-enlace">Adopción Felina</a>
+      </div>
+      <div class="footer-redes">
+        <a href="#" class="red-social"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="red-social"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="red-social"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="red-social"><i class="fab fa-youtube"></i></a>
+      </div>
+      <p>© 2025 Explorador Felino - Desarrollado con <i class="fas fa-heart" style="color: #ec4899;"></i> por Nestor</p>
+    </div>
+  </footer>
+
+  <!-- Modal Detalle -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <div class="modal-header" id="modalHeader"></div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer">
+        <span class="modal-footer-texto">Fuente: The Cat API</span>
+        <div class="modal-acciones">
+          <button class="btn btn-secundario" onclick="cerrarModal()">Cerrar</button>
+          <button class="btn btn-primario" id="btnCompartir">
+            <i class="fas fa-share-alt"></i> Compartir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"> </script>
+</body>
+
+</html>
