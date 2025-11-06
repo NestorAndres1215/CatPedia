@@ -14,8 +14,12 @@ const porPagina = 12;
 let filtroActual = "todos";
 
 async function obtenerRazas() {
-  loader.style.display = "flex";
+ 
   try {
+    if (!loader || !mensaje) {
+      throw new Error("Elementos 'loader' o 'mensaje' no existen en el DOM.");
+    } 
+    loader.style.display = "flex";
     const res = await fetch("https://api.thecatapi.com/v1/breeds");
     if (!res.ok) throw new Error("Error en la API");
     razas = await res.json();
@@ -119,21 +123,49 @@ function mostrarPaginacion(total = razas.length) {
 }
 
 function filtrarRaza(raza, filtro) {
-  switch (filtro) {
-    case "pelaje-largo":
-      return raza.hairless === 0 && raza.short_legs === 0;
-    case "pelaje-corto":
-      return raza.hairless === 0 && raza.short_legs === 1;
-    case "jugueton":
-      return raza.temperament.toLowerCase().includes("playful");
-    case "tranquilo":
-      return raza.temperament.toLowerCase().includes("calm");
-    case "social":
-      return raza.temperament.toLowerCase().includes("social");
-    default:
-      return true;
+  try {
+    // Validación de entrada
+    if (!raza || typeof raza !== "object") {
+      throw new Error("El parámetro 'raza' debe ser un objeto válido.");
+    }
+
+    if (!filtro || typeof filtro !== "string") {
+      throw new Error("El parámetro 'filtro' debe ser una cadena de texto.");
+    }
+
+    // Normalizar texto del filtro
+    filtro = filtro.trim().toLowerCase();
+
+    // Manejo seguro de temperament
+    const temperament = (raza.temperament || "").toLowerCase();
+
+    switch (filtro) {
+      case "pelaje-largo":
+        return raza.hairless === 0 && raza.short_legs === 0;
+
+      case "pelaje-corto":
+        return raza.hairless === 0 && raza.short_legs === 1;
+
+      case "jugueton":
+        return temperament.includes("playful");
+
+      case "tranquilo":
+        return temperament.includes("calm");
+
+      case "social":
+        return temperament.includes("social");
+
+      default:
+        // Si el filtro no existe → no filtrar
+        return true;
+    }
+
+  } catch (error) {
+    console.error("Error al filtrar la raza:", error.message);
+    return false; // Para evitar romper la ejecución
   }
 }
+
 
 function abrirModal(raza) {
   const imagenURL = raza.reference_image_id
@@ -207,14 +239,29 @@ function toggleFavorito(element) {
 }
 
 function mostrarToast(mensajeTexto) {
-  const toast = document.getElementById("toast");
-  document.getElementById("toastMensaje").textContent = mensajeTexto;
-  toast.classList.add("mostrar");
-  setTimeout(() => {
-    toast.classList.remove("mostrar");
-  }, 3000);
-}
+  try {
+    if (!mensajeTexto || typeof mensajeTexto !== "string") {
+      throw new Error("El mensaje del toast debe ser un texto válido.");
+    }
 
+    const toast = document.getElementById("toast");
+    const mensaje = document.getElementById("toastMensaje");
+
+    if (!toast || !mensaje) {
+      throw new Error("Elementos del toast no encontrados en el DOM.");
+    }
+
+    mensaje.textContent = mensajeTexto.trim();
+
+    toast.classList.add("mostrar");
+    setTimeout(() => {
+      toast.classList.remove("mostrar");
+    }, 3000);
+
+  } catch (error) {
+    console.error("Error al mostrar toast:", error.message);
+  }
+}
 function resetearBusqueda() {
   inputBusqueda.value = "";
   paginaActual = 1;
@@ -240,7 +287,20 @@ filtros.forEach(btn => {
 });
 
 window.addEventListener("click", (e) => {
-  if (e.target === modal) cerrarModal();
+  try {
+    const modal = document.getElementById("modal");
+
+    if (!modal) {
+      throw new Error("El elemento 'modal' no existe en el DOM.");
+    }
+
+    if (e.target === modal || modal.contains(e.target) === false) {
+      cerrarModal();
+    }
+
+  } catch (error) {
+    console.error("Error al intentar cerrar el modal:", error.message);
+  }
 });
 
 window.addEventListener("scroll", () => {
