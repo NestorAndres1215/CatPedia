@@ -118,21 +118,35 @@ function mostrarPaginacion(total = razas.length) {
   document.getElementById("paginacionInfo").textContent = totalPaginas > 0 ? `Página ${paginaActual} de ${totalPaginas}` : "";
 }
 
+const Filtros = {
+  PELAJE_LARGO: "pelaje-largo",
+  PELAJE_CORTO: "pelaje-corto",
+  JUGUETON: "jugueton",
+  TRANQUILO: "tranquilo",
+  SOCIAL: "social",
+};
+
+// Objeto de funciones de filtrado
+const filtrosRaza = {
+  [Filtros.PELAJE_LARGO]: (raza) =>
+    raza.hairless === 0 && raza.short_legs === 0,
+
+  [Filtros.PELAJE_CORTO]: (raza) =>
+    raza.hairless === 0 && raza.short_legs === 1,
+
+  [Filtros.JUGUETON]: (raza) =>
+    raza.temperament?.toLowerCase().includes("playful"),
+
+  [Filtros.TRANQUILO]: (raza) =>
+    raza.temperament?.toLowerCase().includes("calm"),
+
+  [Filtros.SOCIAL]: (raza) =>
+    raza.temperament?.toLowerCase().includes("social"),
+};
+
+// Función principal que usa el objeto de filtros
 function filtrarRaza(raza, filtro) {
-  switch (filtro) {
-    case "pelaje-largo":
-      return raza.hairless === 0 && raza.short_legs === 0;
-    case "pelaje-corto":
-      return raza.hairless === 0 && raza.short_legs === 1;
-    case "jugueton":
-      return raza.temperament.toLowerCase().includes("playful");
-    case "tranquilo":
-      return raza.temperament.toLowerCase().includes("calm");
-    case "social":
-      return raza.temperament.toLowerCase().includes("social");
-    default:
-      return true;
-  }
+  return filtrosRaza[filtro]?.(raza) ?? true;
 }
 
 function abrirModal(raza) {
