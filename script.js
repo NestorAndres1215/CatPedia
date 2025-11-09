@@ -7,17 +7,28 @@ const paginacion = document.getElementById("paginacion");
 const modal = document.getElementById("modal");
 const filtros = document.querySelectorAll(".btn-filtro");
 const volverArriba = document.getElementById("volverArriba");
+const FILTROS = {
+  PELAJE_LARGO: "pelaje-largo",
+  PELAJE_CORTO: "pelaje-corto",
+  JUGUETON: "jugueton",
+  TRANQUILO: "tranquilo",
+  SOCIAL: "social",
+};
 
 let razas = [];
 let paginaActual = 1;
 const porPagina = 12;
 let filtroActual = "todos";
+const ERROR_API = "Error en la API";
+const API_CATS_BREEDS_URL = "https://api.thecatapi.com/v1/breeds";
 
 async function obtenerRazas() {
   loader.style.display = "flex";
   try {
-    const res = await fetch("https://api.thecatapi.com/v1/breeds");
-    if (!res.ok) throw new Error("Error en la API");
+   const res = await fetch(API_CATS_BREEDS_URL);
+
+    if (!res.ok) throw new Error(ERROR_API);
+
     razas = await res.json();
     mostrarPaginacion();
     mostrarRazas();
@@ -119,21 +130,30 @@ function mostrarPaginacion(total = razas.length) {
 }
 
 function filtrarRaza(raza, filtro) {
+  const temperament = raza.temperament?.toLowerCase() ?? "";
+
   switch (filtro) {
-    case "pelaje-largo":
+
+    case FILTROS.PELAJE_LARGO:
       return raza.hairless === 0 && raza.short_legs === 0;
-    case "pelaje-corto":
+
+    case FILTROS.PELAJE_CORTO:
       return raza.hairless === 0 && raza.short_legs === 1;
-    case "jugueton":
-      return raza.temperament.toLowerCase().includes("playful");
-    case "tranquilo":
-      return raza.temperament.toLowerCase().includes("calm");
-    case "social":
-      return raza.temperament.toLowerCase().includes("social");
+
+    case FILTROS.JUGUETON:
+      return temperament.includes("playful");
+
+    case FILTROS.TRANQUILO:
+      return temperament.includes("calm");
+
+    case FILTROS.SOCIAL:
+      return temperament.includes("social");
+
     default:
       return true;
   }
 }
+
 
 function abrirModal(raza) {
   const imagenURL = raza.reference_image_id
@@ -189,13 +209,18 @@ function abrirModal(raza) {
     const texto = `¡Descubre la raza de gato ${raza.name}! ${url}`;
     if (navigator.share) {
       navigator.share({ title: raza.name, text: texto, url })
-        .then(() => mostrarToast("¡Enlace compartido!"))
-        .catch(() => mostrarToast("Error al compartir"));
+        .then(() => mostrarToast(MENSAJES_COMPARTIR.EXITO))
+        .catch(() => mostrarToast(MENSAJES_COMPARTIR.ERROR));
     } else {
-      navigator.clipboard.write(texto).then(() => mostrarToast("¡Enlace copiado al portapapeles!"));
+      navigator.clipboard.write(texto).then(() => mostrarToast(MENSAJES_COMPARTIR.COPIADO));
     }
   };
 }
+const MENSAJES_COMPARTIR = {
+  EXITO: "¡Enlace compartido!",
+  ERROR: "Error al compartir",
+  COPIADO: "¡Enlace copiado al portapapeles!"
+};
 
 function cerrarModal() {
   modal.style.display = "none";
