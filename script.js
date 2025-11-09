@@ -25,7 +25,7 @@ const API_CATS_BREEDS_URL = "https://api.thecatapi.com/v1/breeds";
 async function obtenerRazas() {
   loader.style.display = "flex";
   try {
-   const res = await fetch(API_CATS_BREEDS_URL);
+    const res = await fetch(API_CATS_BREEDS_URL);
 
     if (!res.ok) throw new Error(ERROR_API);
 
@@ -98,9 +98,10 @@ function mostrarRazas(filtradas = razas) {
           <span class="etiqueta">Vida: ${raza.life_span} años</span>
         </div>
         <div class="acciones">
-          <button class="btn btn-primario" onclick='abrirModal(${JSON.stringify(raza)})'>
-            Ver más
-          </button>
+<button class="btn btn-primario" onclick='abrirModal(${JSON.stringify(raza)})'>
+  Ver más <i class="fas fa-paw"></i>
+</button>
+
         </div>
       </div>
     `;
@@ -216,6 +217,14 @@ function abrirModal(raza) {
     }
   };
 }
+document.addEventListener("DOMContentLoaded", () => {
+  const header = document.getElementById("headerAnimado");
+
+  setTimeout(() => {
+    header.classList.add("visible");
+  }, 200); // Delay suave
+});
+
 const MENSAJES_COMPARTIR = {
   EXITO: "¡Enlace compartido!",
   ERROR: "Error al compartir",
@@ -232,12 +241,25 @@ function toggleFavorito(element) {
 }
 
 function mostrarToast(mensajeTexto) {
-  const toast = document.getElementById("toast");
-  document.getElementById("toastMensaje").textContent = mensajeTexto;
-  toast.classList.add("mostrar");
-  setTimeout(() => {
-    toast.classList.remove("mostrar");
-  }, 3000);
+  try {
+    const toast = document.getElementById("toast");
+    const mensaje = document.getElementById("toastMensaje");
+
+    if (!toast || !mensaje) {
+      console.warn("Toast no encontrado en el DOM");
+      return;
+    }
+
+    mensaje.textContent = mensajeTexto;
+    toast.classList.add("mostrar");
+
+    setTimeout(() => {
+      toast.classList.remove("mostrar");
+    }, 3000);
+
+  } catch (error) {
+    console.error("Error al mostrar el toast:", error);
+  }
 }
 
 function resetearBusqueda() {

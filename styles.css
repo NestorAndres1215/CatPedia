@@ -657,6 +657,7 @@ footer {
   font-size: 1.2rem;
 }
 
+
 @media (prefers-color-scheme: dark) {
   :root {
     --color-fondo: #0f172a;
