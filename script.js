@@ -12,16 +12,12 @@ let razas = [];
 let paginaActual = 1;
 const porPagina = 12;
 let filtroActual = "todos";
-const API_URL = "https://api.thecatapi.com/v1/breeds";
-const ERROR_API = "Error al obtener los datos de la API";
+
 async function obtenerRazas() {
   loader.style.display = "flex";
   try {
-    const res = await fetch(API_URL);
-
-    if (!res.ok) {
-      throw new Error(ERROR_API);
-    }
+    const res = await fetch("https://api.thecatapi.com/v1/breeds");
+    if (!res.ok) throw new Error("Error en la API");
     razas = await res.json();
     mostrarPaginacion();
     mostrarRazas();
@@ -69,13 +65,11 @@ function mostrarRazas(filtradas = razas) {
     document.getElementById("paginacionInfo").textContent = "";
     return;
   }
-  const BASE_IMAGE_URL = "https://cdn2.thecatapi.com/images/";
-  const PLACEHOLDER_IMAGE = "https://via.placeholder.com/400x300?text=Sin+Imagen";
 
   razasPagina.forEach(raza => {
     const imagenURL = raza.reference_image_id
-      ? `${BASE_IMAGE_URL}${raza.reference_image_id}.jpg`
-      : PLACEHOLDER_IMAGE;
+      ? `https://cdn2.thecatapi.com/images/${raza.reference_image_id}.jpg`
+      : "https://via.placeholder.com/400x300?text=Sin+Imagen";
 
     const tarjeta = document.createElement("div");
     tarjeta.className = "tarjeta-raza";
@@ -104,7 +98,6 @@ function mostrarRazas(filtradas = razas) {
 
   mostrarPaginacion(razasFiltradas.length);
 }
-const TODOS = "todos";
 
 function mostrarPaginacion(total = razas.length) {
   paginacion.innerHTML = "";
@@ -117,7 +110,7 @@ function mostrarPaginacion(total = razas.length) {
     if (i === paginaActual) btn.classList.add("activo");
     btn.onclick = () => {
       paginaActual = i;
-      mostrarRazas(filtroActual === TODOS ? razas : razas.filter(raza => filtrarRaza(raza, filtroActual)));
+      mostrarRazas(filtroActual === "todos" ? razas : razas.filter(raza => filtrarRaza(raza, filtroActual)));
     };
     paginacion.appendChild(btn);
   }
@@ -125,6 +118,7 @@ function mostrarPaginacion(total = razas.length) {
   document.getElementById("paginacionInfo").textContent = totalPaginas > 0 ? `Página ${paginaActual} de ${totalPaginas}` : "";
 }
 
+// Constantes para los filtros
 const Filtros = {
   PELAJE_LARGO: "pelaje-largo",
   PELAJE_CORTO: "pelaje-corto",
@@ -155,14 +149,12 @@ const filtrosRaza = {
 function filtrarRaza(raza, filtro) {
   return filtrosRaza[filtro]?.(raza) ?? true;
 }
-const MENSAJE_COMPARTIDO = "¡Enlace compartido!";
-const MENSAJE_ERROR_COMPARTIR = "Error al compartir";
-const MENSAJE_COPIADO = "¡Enlace copiado al portapapeles!";
+
 
 function abrirModal(raza) {
   const imagenURL = raza.reference_image_id
-    ? `${BASE_IMAGE_URL}${raza.reference_image_id}.jpg`
-    : PLACEHOLDER_IMAGE;
+    ? `https://cdn2.thecatapi.com/images/${raza.reference_image_id}.jpg`
+    : "https://via.placeholder.com/400x300?text=Sin+Imagen";
 
   document.getElementById("modalHeader").innerHTML = `
     <img style="height: 600px;" src="${imagenURL}" alt="${raza.name}" onerror="this.src='https://via.placeholder.com/400x300?text=Sin+Imagen';">
@@ -213,12 +205,10 @@ function abrirModal(raza) {
     const texto = `¡Descubre la raza de gato ${raza.name}! ${url}`;
     if (navigator.share) {
       navigator.share({ title: raza.name, text: texto, url })
-        .then(() => mostrarToast(MENSAJE_COMPARTIDO))
-        .catch(() => mostrarToast(MENSAJE_ERROR_COMPARTIR));
+        .then(() => mostrarToast("¡Enlace compartido!"))
+        .catch(() => mostrarToast("Error al compartir"));
     } else {
-      navigator.clipboard.writeText(texto)
-        .then(() => mostrarToast(MENSAJE_COPIADO))
-        .catch(() => mostrarToast(MENSAJE_ERROR_COMPARTIR));
+      navigator.clipboard.write(texto).then(() => mostrarToast("¡Enlace copiado al portapapeles!"));
     }
   };
 }
@@ -226,17 +216,12 @@ function abrirModal(raza) {
 function cerrarModal() {
   modal.style.display = "none";
 }
-const MENSAJE_FAVORITO_AGREGADO = "Añadido a favoritos";
-const MENSAJE_FAVORITO_ELIMINADO = "Eliminado de favoritos";
 
 function toggleFavorito(element) {
   element.classList.toggle("activo");
-  const mensaje = element.classList.contains("activo") 
-    ? MENSAJE_FAVORITO_AGREGADO 
-    : MENSAJE_FAVORITO_ELIMINADO;
-
-  mostrarToast(mensaje);
+  mostrarToast(element.classList.contains("activo") ? "Añadido a favoritos" : "Eliminado de favoritos");
 }
+
 function mostrarToast(mensajeTexto) {
   const toast = document.getElementById("toast");
   document.getElementById("toastMensaje").textContent = mensajeTexto;
@@ -257,7 +242,7 @@ function resetearBusqueda() {
 
 inputBusqueda.addEventListener("input", () => {
   paginaActual = 1;
-  mostrarRazas(filtroActual === TODOS ? razas : razas.filter(raza => filtrarRaza(raza, filtroActual)));
+  mostrarRazas(filtroActual === "todos" ? razas : razas.filter(raza => filtrarRaza(raza, filtroActual)));
 });
 
 filtros.forEach(btn => {
@@ -266,7 +251,7 @@ filtros.forEach(btn => {
     btn.classList.add("activo");
     filtroActual = btn.dataset.filtro;
     paginaActual = 1;
-    mostrarRazas(filtroActual === TODOS ? razas : razas.filter(raza => filtrarRaza(raza, filtroActual)));
+    mostrarRazas(filtroActual === "todos" ? razas : razas.filter(raza => filtrarRaza(raza, filtroActual)));
   });
 });
 
