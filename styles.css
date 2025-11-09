@@ -60,14 +60,12 @@ header::before {
 h1 {
   font-size: 3rem;
   margin-bottom: 15px;
-  animation: fadeIn 1s ease-in-out;
   font-weight: 800;
   letter-spacing: -0.025em;
 }
 
 .titulo-emoji {
   display: inline-block;
-  animation: bounce 2s infinite;
   margin-right: 10px;
 }
 
@@ -180,7 +178,6 @@ h1 {
   overflow: hidden;
   box-shadow: var(--sombra-suave);
   transition: var(--transicion);
-  animation: aparecer 0.5s ease-in-out;
   position: relative;
 }
 
@@ -363,7 +360,6 @@ h1 {
 .loader i {
   font-size: 3rem;
   color: var(--color-primario);
-  animation: rotar 1.5s infinite linear;
 }
 
 .loader p {
@@ -434,11 +430,6 @@ footer {
   flex-direction: column;
   gap: 15px;
 }
-
-
-
-
-
 
 /* Estilos para la paginación */
 .paginacion {
@@ -515,7 +506,6 @@ footer {
   position: relative;
   overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  animation: modalEntrada 0.3s ease-out;
 }
 
 .modal-header {
@@ -667,66 +657,6 @@ footer {
   font-size: 1.2rem;
 }
 
-/* Animaciones */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes aparecer {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes rotar {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes bounce {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes modalEntrada {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Modo oscuro */
 @media (prefers-color-scheme: dark) {
   :root {
     --color-fondo: #0f172a;
@@ -771,7 +701,6 @@ footer {
   }
 }
 
-/* Responsividad */
 @media (max-width: 600px) {
   .modal-content {
     width: 95%;
