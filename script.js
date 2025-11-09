@@ -7,28 +7,17 @@ const paginacion = document.getElementById("paginacion");
 const modal = document.getElementById("modal");
 const filtros = document.querySelectorAll(".btn-filtro");
 const volverArriba = document.getElementById("volverArriba");
-const FILTROS = {
-  PELAJE_LARGO: "pelaje-largo",
-  PELAJE_CORTO: "pelaje-corto",
-  JUGUETON: "jugueton",
-  TRANQUILO: "tranquilo",
-  SOCIAL: "social",
-};
 
 let razas = [];
 let paginaActual = 1;
 const porPagina = 12;
 let filtroActual = "todos";
-const ERROR_API = "Error en la API";
-const API_CATS_BREEDS_URL = "https://api.thecatapi.com/v1/breeds";
 
 async function obtenerRazas() {
   loader.style.display = "flex";
   try {
-    const res = await fetch(API_CATS_BREEDS_URL);
-
-    if (!res.ok) throw new Error(ERROR_API);
-
+    const res = await fetch("https://api.thecatapi.com/v1/breeds");
+    if (!res.ok) throw new Error("Error en la API");
     razas = await res.json();
     mostrarPaginacion();
     mostrarRazas();
@@ -98,10 +87,9 @@ function mostrarRazas(filtradas = razas) {
           <span class="etiqueta">Vida: ${raza.life_span} años</span>
         </div>
         <div class="acciones">
-<button class="btn btn-primario" onclick='abrirModal(${JSON.stringify(raza)})'>
-  Ver más <i class="fas fa-paw"></i>
-</button>
-
+          <button class="btn btn-primario" onclick='abrirModal(${JSON.stringify(raza)})'>
+            Ver más
+          </button>
         </div>
       </div>
     `;
@@ -131,30 +119,21 @@ function mostrarPaginacion(total = razas.length) {
 }
 
 function filtrarRaza(raza, filtro) {
-  const temperament = raza.temperament?.toLowerCase() ?? "";
-
   switch (filtro) {
-
-    case FILTROS.PELAJE_LARGO:
+    case "pelaje-largo":
       return raza.hairless === 0 && raza.short_legs === 0;
-
-    case FILTROS.PELAJE_CORTO:
+    case "pelaje-corto":
       return raza.hairless === 0 && raza.short_legs === 1;
-
-    case FILTROS.JUGUETON:
-      return temperament.includes("playful");
-
-    case FILTROS.TRANQUILO:
-      return temperament.includes("calm");
-
-    case FILTROS.SOCIAL:
-      return temperament.includes("social");
-
+    case "jugueton":
+      return raza.temperament.toLowerCase().includes("playful");
+    case "tranquilo":
+      return raza.temperament.toLowerCase().includes("calm");
+    case "social":
+      return raza.temperament.toLowerCase().includes("social");
     default:
       return true;
   }
 }
-
 
 function abrirModal(raza) {
   const imagenURL = raza.reference_image_id
@@ -210,26 +189,13 @@ function abrirModal(raza) {
     const texto = `¡Descubre la raza de gato ${raza.name}! ${url}`;
     if (navigator.share) {
       navigator.share({ title: raza.name, text: texto, url })
-        .then(() => mostrarToast(MENSAJES_COMPARTIR.EXITO))
-        .catch(() => mostrarToast(MENSAJES_COMPARTIR.ERROR));
+        .then(() => mostrarToast("¡Enlace compartido!"))
+        .catch(() => mostrarToast("Error al compartir"));
     } else {
-      navigator.clipboard.write(texto).then(() => mostrarToast(MENSAJES_COMPARTIR.COPIADO));
+      navigator.clipboard.write(texto).then(() => mostrarToast("¡Enlace copiado al portapapeles!"));
     }
   };
 }
-document.addEventListener("DOMContentLoaded", () => {
-  const header = document.getElementById("headerAnimado");
-
-  setTimeout(() => {
-    header.classList.add("visible");
-  }, 200); // Delay suave
-});
-
-const MENSAJES_COMPARTIR = {
-  EXITO: "¡Enlace compartido!",
-  ERROR: "Error al compartir",
-  COPIADO: "¡Enlace copiado al portapapeles!"
-};
 
 function cerrarModal() {
   modal.style.display = "none";
@@ -241,25 +207,12 @@ function toggleFavorito(element) {
 }
 
 function mostrarToast(mensajeTexto) {
-  try {
-    const toast = document.getElementById("toast");
-    const mensaje = document.getElementById("toastMensaje");
-
-    if (!toast || !mensaje) {
-      console.warn("Toast no encontrado en el DOM");
-      return;
-    }
-
-    mensaje.textContent = mensajeTexto;
-    toast.classList.add("mostrar");
-
-    setTimeout(() => {
-      toast.classList.remove("mostrar");
-    }, 3000);
-
-  } catch (error) {
-    console.error("Error al mostrar el toast:", error);
-  }
+  const toast = document.getElementById("toast");
+  document.getElementById("toastMensaje").textContent = mensajeTexto;
+  toast.classList.add("mostrar");
+  setTimeout(() => {
+    toast.classList.remove("mostrar");
+  }, 3000);
 }
 
 function resetearBusqueda() {
@@ -298,6 +251,8 @@ window.addEventListener("scroll", () => {
   }
 });
 
-
+volverArriba.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
 
 obtenerRazas();

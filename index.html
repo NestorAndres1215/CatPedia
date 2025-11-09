@@ -7,21 +7,16 @@
   <title>🐱 Explorador de Razas Felinas</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-
 </head>
 
 <body>
-  <header id="headerAnimado">
+  <header>
     <div class="contenedor-principal">
-      <h1><span class="titulo-emoji"> <i class="fa-solid fa-cat titulo-emoji"></i></span> Explorador de Razas Felinas
-      </h1>
+      <h1><span class="titulo-emoji">🐱</span> Explorador de Razas Felinas</h1>
       <p class="descripcion">
-        Cada gato es un universo único. Aquí podrás descubrir sus historias, su origen y lo que hace especial a cada
-        raza.
-        Observa, aprende y déjate cautivar por el misterioso encanto del mundo felino.
+        Descubre y explora las fascinantes razas de gatos de todo el mundo. Conoce sus características, orígenes y
+        personalidades únicas.
       </p>
-
-
       <div class="buscador">
         <input type="text" id="inputBusqueda" placeholder="Buscar por nombre, origen o características...">
         <i class="fas fa-search icono-buscar"></i>
@@ -29,22 +24,17 @@
     </div>
   </header>
 
-
   <main class="contenedor-principal">
     <div class="filtros-container">
-      <h2 class="titulo-seccion">
-        <i class="fas fa-paw"></i> Explora por características
-      </h2>
-
+      <h2 class="titulo-seccion">Explora por características</h2>
       <div class="filtros" id="filtros">
-        <button class="btn-filtro activo" data-filtro="todos"><i class="fas fa-globe"></i> Todos</button>
-        <button class="btn-filtro" data-filtro="pelaje-largo"><i class="fas fa-brush"></i> Pelaje Largo</button>
-        <button class="btn-filtro" data-filtro="pelaje-corto"><i class="fas fa-cut"></i> Pelaje Corto</button>
-        <button class="btn-filtro" data-filtro="jugueton"><i class="fas fa-gamepad"></i> Juguetón</button>
-        <button class="btn-filtro" data-filtro="tranquilo"><i class="fas fa-moon"></i> Tranquilo</button>
-        <button class="btn-filtro" data-filtro="social"><i class="fas fa-users"></i> Social</button>
+        <button class="btn-filtro activo" data-filtro="todos">Todos</button>
+        <button class="btn-filtro" data-filtro="pelaje-largo">Pelaje Largo</button>
+        <button class="btn-filtro" data-filtro="pelaje-corto">Pelaje Corto</button>
+        <button class="btn-filtro" data-filtro="jugueton">Juguetón</button>
+        <button class="btn-filtro" data-filtro="tranquilo">Tranquilo</button>
+        <button class="btn-filtro" data-filtro="social">Social</button>
       </div>
-
     </div>
 
     <div id="contenedor" class="contenedor-razas"></div>
@@ -65,23 +55,22 @@
     <div id="paginacion" class="paginacion"></div>
     <div class="paginacion-info" id="paginacionInfo"></div>
   </main>
+
+  <div class="volver-arriba" id="volverArriba">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
   <div class="toast" id="toast">
     <i class="fas fa-check-circle"></i>
     <span id="toastMensaje">Mensaje de notificación</span>
   </div>
 
-<footer>
-  <div class="footer-contenido">
-    <p>
-      © 2025 Explorador Felino 
-      <i class="fas fa-cat footer-icon"></i> 
-      Desarrollado con 
-      <i class="fas fa-heart footer-heart"></i> 
-      por <strong>Nestor</strong>
-    </p>
-  </div>
-</footer>
+  <footer>
+    <div class="footer-contenido">
 
+      <p>© 2025 Explorador Felino - Desarrollado con <i class="fas fa-heart" style="color: #ec4899;"></i> por Nestor</p>
+    </div>
+  </footer>
 
   <!-- Modal Detalle -->
   <div class="modal" id="modal">
